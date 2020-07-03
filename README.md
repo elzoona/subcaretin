@@ -5,17 +5,16 @@
 Nota: visita también [subcaretin-auto](https://github.com/vitiko123/subcaretin-auto)
 
 ### Demostración
-![búsqueda con subcaretin](screenshots/screen.png "subcaretin en acción")
+![búsqueda con su bcaretin](screenshots/screen.png "subcaretin en acción")
 
 
 ## Características
 
 * Búsqueda manual de subtítulos en Subdivx y Argenteam
 * Decarga y extracción automática del subtítulo elegido para luego ser renombrado de acuerdo al archivo de vídeo referenciado
-* Sincronización opcional del subtítulo gracias a [ffsubsync (subsync)](https://github.com/smacke/ffsubsync), programa escrito en python por [smacke](https://github.com/smacke)
 * Conversión automática de los subtítulos a UTF-8 para evitar problemas de compatibilidad
 * Chequeo de integridad de subtítulos descargados
-
+ 
 ## Uso
 ```
 chmod +x subcaretin
@@ -32,12 +31,8 @@ chmod +x subcaretin
 * unrar
 * unzip
 
-### Opcional
-* [ffsubsync (subsync)](https://github.com/smacke/ffsubsync) (para sincronizar los subtítulos descargados) 
-
 ## Por hacer
 
-* Volver a comprimir subtítulos re-sincronizados con ffsubsync para que de esta manera el usuario pueda subirlos cómodamente a Subdivx y mejorar la database
 * Hacer un port en Rust o Python
 
 ## Miscelánea
@@ -55,4 +50,6 @@ chmod +x subcaretin
 
 - Soporte para Argenteam agregado
 
+### 0.3 - Jul 03 2020
 
+- Soporte para ffsubsync eliminado

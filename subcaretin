@@ -34,41 +34,14 @@ function eliminar {
 
 eliminar
 
-function integridad {
-        echo -e " \n${bold}Revisando integridad del subtítulo...${normal}"
-        if [ -s "$name.sy.srt" ]; then
-                echo -e " \n${green}Subtitulo en buen estado${normal} \n"
-		suc_subsync="Subtítulo sincronizado: $name.sy.srt"
-        else
-                echo -e " \n${red}El archivo del subtítulo parece estar vacio.${normal} Intenta descargarlo de nuevo"; exit 1
-        fi
-}
-
-function subsync1 {
-	        echo ""
-		read -p "Sincronizar con ffsubsync? (y, n): " -n 1 -r
-		echo
-		if [[ "$REPLY" =~ ^[YysS]$ ]]; then
-			if [ -e "$name.srt" ]; then
-				echo -e " \n${bold}Sincronizando el subtítulo para tu video con ffsubsync${normal} \n"
-				ffsubsync "$film" -i "$name.srt" -o "$name.sy.srt"
-				integridad
-			else
-				echo -e " \n${red}No existe un subtítulo para sincronizar.${normal} Intenta de nuevo"; echo "Limpiando..."; eliminar; exit 1
-			fi
-		else
-			echo "Okay. Tu subtítulo quedará tal como lo bajaste"
-		fi
-}
-
 echo -e "${bold}Revisando dependencias...${normal}"
 
 if ! [ -x "$(command -v unrar)" ]; then
-	echo 'unrar no esta instalado. No podremos extraer los subtítulos de ninguna forma!' >&2 | fold -w 70 ; exit 1
+	echo 'unrar no está instalado. No podremos extraer los subtítulos de ninguna forma!' >&2 | fold -w 70 ; exit 1
 elif ! [ -x "$(command -v unzip)" ]; then
-	echo 'unzip no esta instalado. No podremos extraer los subtítulos de ninguna forma!' >&2; exit 1
+	echo 'unzip no está instalado. No podremos extraer los subtítulos de ninguna forma!' >&2; exit 1
 elif ! [ -x "$(command -v iconv)" ]; then
-	echo 'iconv no esta instalado. Sera imposible convertir los subtítulos a UTF y el script no funcionara' >&2; exit 1
+	echo 'iconv no está instalado. Será imposible convertir los subtítulos a UTF y el script no funcionará' >&2; exit 1
 fi
 
 echo -e " \n${bold}Bienvenido/a a subcaretin!${normal} \n"
@@ -85,6 +58,7 @@ manual_dl() {
 	else
 		echo -e " \n${red}Error al bajar!${normal} Vuelve a intentarlo. \n"; eliminar ; exit 1
 	fi
+
 	mkdir /tmp/srts
 	echo "Probando con zip y rar..."
 	unrar e /tmp/output.zip /tmp/srts/ -inul
@@ -94,28 +68,34 @@ manual_dl() {
 	nl -b a <(echo "$elige")
 	echo ""
 	read -p "Elige el número a conservar. (Si no sale nada, cierra con 'q' y vuele a intentar): " numero1
+	
 	if [ "$numero1" == "$salir" ]; then
-        echo "Limpiando..." ; eliminar; exit 1
+		echo "Limpiando..." ; eliminar; exit 1
 	fi
+
 	lista1=$(sed $numero1!d <(echo "$elige"))
 	puedeser=$(cat <(echo "$lista1"))
 	mv "/tmp/srts/$puedeser" /tmp/listo.srt
 	echo -e " \nConvirtiendo a utf y renombrando... \n"
         utf1="utf"
         utf2=$(file -bi /tmp/listo.srt)
-        if [[ "${utf2,,}" = *"${utf1,,}"* ]]; then
+        
+	if [[ "${utf2,,}" = *"${utf1,,}"* ]]; then
                 mv /tmp/listo.srt "$name.srt"
         else
                 iconv -f 8859_1 /tmp/listo.srt > "$name.srt"
         fi
+
 	if [ -e "$name.srt" ]; then
-	echo -e "${green}Subtítulo listo: $name.srt${normal} \n"
+		echo -e "${green}Subtítulo listo: $name.srt${normal} \n"
         else
-	echo -e "${red}No encontramos el subtítulo! Vuelve a intentarlo${red} \n"; eliminar; exit 1
+		echo -e "${red}No encontramos el subtítulo! Vuelve a intentarlo${red} \n"; eliminar; exit 1
 	fi
+	
 	echo -e "${bold}Revisando integridad del subtítulo...${normal}"
+	
 	if [ -s "$name.srt" ]; then
-        echo -e " \n${green}Subtitulo en buen estado!${normal}"
+		echo -e " \n${green}Subtitulo en buen estado!${normal}"
         else
 		echo -e " \n${red}El archivo del subtítulo está vacío.${normal}\nIntenta descargarlo de nuevo y si el problema persiste baja otro
          y repórtalo en Subdivx"; eliminar; exit 1 
@@ -123,18 +103,22 @@ manual_dl() {
 }
 
 read -p "Escribe el nombre o palabras clave de la pelicula o episodio que buscas: " pelicula
+
 extraido1=$(echo "${pelicula// /+}")
+
 echo -e " \nBuscando en Subdivx y Argenteam... \n"
+
 api_search="http://argenteam.net/api/v1/search"
 api_episode="http://argenteam.net/api/v1/episode"
 api_movie="http://argenteam.net/api/v1/movie"
+
 conca=$(wget -O - "$api_search?q=$extraido1" -q | jq -r '.results[] | "\(.id),\(.type)"')
 
 if [[ -z "${conca}" ]]; then
 	touch /tmp/resultados /tmp/links
 else
 	lista_arg=$(while IFS= read -r line
-do
+        do
 	if [[ "$line" == *"movie"* ]]; then
 		id_arg=$(echo "$line" | sed 's/[^0-9]*//g')
 		da_curl=$(wget -O - "$api_movie?id=$id_arg" -q)
@@ -153,6 +137,7 @@ do
 			titulo_a=$(jq '"\(.title) (S0\(.season)E\(.number))"' <(echo "$da_curl"))
 		fi
 	fi
+
 	echo "$elegir_descarga"| sed "s/^/$titulo_a: /"	
 done < <(echo "$conca"))
 
@@ -167,11 +152,14 @@ titulos=$(iconv -f 8859_1 <(echo "$pagina") | grep -oP '(?<=<a class="titulo_men
 links_subd=$(iconv -f 8859_1 <(echo "$pagina") | grep -oP '(?<=<a class="titulo_menu_izq" href=)[^<]*' | grep -oP 'http.?://\S+"' | sed 's/\"//')
 links_subd1=$(cat <(echo "$links_subd"))
 resultados_sub=$(paste <(echo "$titulos") <(echo "$descripciones"))
+
 echo "$resultados_sub" >> /tmp/resultados
 echo "$links_subd1" >> /tmp/links
 echo -e "${bold}Resultados:${normal}"
+
 nl -b a /tmp/resultados
 rm -f /tmp/resultados
+
 echo ""
 read -p "Elige el numero del subtitulo a bajar ('q' para salir): " numero
 salir="q"
@@ -205,7 +193,6 @@ else
 fi
 
 eliminar
-subsync1
 	
 echo -e " \n${bold}Listo${normal}"
 
