@@ -2,7 +2,7 @@
 
 `subcaretin` busca, descarga, extrae, renombra y sincroniza subtítulos de Subdivx y Argenteam.
 
-> Nota: para búsquedas automáticas, visita [subcaretin-auto](https://github.com/vitiko123/subcaretin-auto)
+> Nota: para búsquedas y descargas automáticas, visita [subcaretin-auto](https://github.com/vitiko123/subcaretin-auto)
 
 ## Demostración
 ![búsqueda con su bcaretin](screenshots/screen.png "subcaretin en acción")
