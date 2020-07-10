@@ -46,7 +46,8 @@ python3 subcaretin.py VIDEO.mkv
 
 ## Miscelánea
 
-* Testeado en Arch Linux, Slackware, Debian Server y Ubuntu Server. ~~Puede que funcione en MAC OS~~. Habrán problemas con las flags de `grep` en MAC, pero se pueden resolver manualmente. Es muy probable que el script funcione en el subsistema de Linux en Windows 10
+* El bash script fue testeado en Arch Linux, Slackware, Debian Server y Ubuntu Server. ~~Puede que funcione en MAC OS~~. Habrán problemas con las flags de `grep` en MAC, pero se pueden resolver manualmente. Es muy probable que el script funcione en el subsistema de Linux en Windows 10
+* El port de python funcionará en cualquier sistema que tenga python 3 instalado
 * Mi subdivx: https://www.subdivx.com/X9X2117299
 
 ## Changelog
@@ -62,3 +63,7 @@ python3 subcaretin.py VIDEO.mkv
 ### 0.3 - Jul 03 2020
 
 - Soporte para ffsubsync eliminado
+
+### 0.4 - Jul 10 2020
+
+- Port de python en estado de prueba agregado
