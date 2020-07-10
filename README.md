@@ -16,12 +16,18 @@
 * Chequeo de integridad de subtítulos descargados
  
 ## Uso
+
+> Por ahora, el port de python está escrito como la mierda y sólo soporta búsquedas de Subdivx. Es mejor usar el bash script.
+
 ```
 chmod +x subcaretin
+pip3 install -r requirements.txt --user ## Ignora si no usarás el port de python
 ```
 ```
+## shell
 ./subcaretin VIDEO.mkv
-./subcaretin VIDEO.mp4
+## python
+python3 subcaretin.py VIDEO.mkv
 ```
 
 ## Dependencias
