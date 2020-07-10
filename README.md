@@ -17,7 +17,7 @@
  
 ## Uso
 
-> Por ahora, el port de python está escrito como la mierda y sólo soporta búsquedas de Subdivx. Es mejor usar el bash script.
+> Nota: por ahora, el port de python está escrito como la mierda y sólo soporta búsquedas de Subdivx. Es mejor usar el bash script.
 
 ```
 chmod +x subcaretin
@@ -32,10 +32,13 @@ python3 subcaretin.py VIDEO.mkv
 
 ## Dependencias
 ### Obligatorio
+#### bash script
 * wget
 * iconv
 * unrar
 * unzip
+#### python
+* ver el archivo de texto "requirements.txt"
 
 ## Por hacer
 
