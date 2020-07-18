@@ -32,14 +32,9 @@ chmod +x subcaretin
 * unzip
 * ver el archivo de texto "requirements.txt"
 
-## Por hacer
-
-* Hacer un port en Rust o Python
-
 ## Miscelánea
 
 * El bash script fue testeado en Arch Linux, Slackware, Debian Server y Ubuntu Server. ~~Puede que funcione en MAC OS~~. Habrán problemas con las flags de `grep` en MAC, pero se pueden resolver manualmente. Es muy probable que el script funcione en el subsistema de Linux en Windows 10
-* El port de python funcionará en cualquier sistema que tenga python 3 instalado
 * Mi subdivx: https://www.subdivx.com/X9X2117299
 
 ## Changelog
