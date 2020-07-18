@@ -59,3 +59,8 @@ chmod +x subcaretin
 ### 0.4 - Jul 10 2020
 
 - Port de python en estado de prueba agregado
+
+### 0.4 - Jul 17 2020
+
+- Por de python eliminado temporalmente
+
