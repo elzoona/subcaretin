@@ -9,176 +9,99 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #======================================================================
 
-blue=$(tput setaf 4)
-magenta=$(tput setaf 5)
-yellow=$(tput setaf 3)
-cyan=$(tput setaf 6)
-green=$(tput setaf 2)
-bold=$(tput bold)
-normal=$(tput sgr0)
-red=$(tput setaf 1)
 film="$1"
 name=$(echo "${film%.*}")
 
-if [ -z "$film" ]; then
-	echo -e "No introduciste un archivo de video \nEjemplo: ./subcaretin VIDEO.MKV"; exit 1
-fi
+function entrada {
+    if [ -z "$film" ]; then
+    	echo -e "No introduciste un archivo de video \nEjemplo: ./subcaretin VIDEO.MKV"; exit 1
+    fi
 
-if ! [[ $film =~ \.mkv$ ]] && ! [[ $film =~ \.m4v ]] && ! [[ $film =~ \.avi$ ]] && ! [[ $film =~ \.mp4$ ]]; then
-	echo "No introduciste un contenedor de vídeo válido (mkv, avi, mp4...)"; exit 1
-fi
+    if ! [[ $film =~ \.mkv$ ]] && ! [[ $film =~ \.m4v ]] && ! [[ $film =~ \.avi$ ]] && ! [[ $film =~ \.mp4$ ]]; then
+    	echo "No introduciste un contenedor de vídeo válido (mkv, avi, mp4...)"; exit 1
+    fi
+}
 
 function eliminar {
 	rm -fr /tmp/listo.srt /tmp/output.zip /tmp/srts
-       }
-
-eliminar
-
-echo -e "${bold}Revisando dependencias...${normal}"
-
-if ! [ -x "$(command -v unrar)" ]; then
-	echo 'unrar no está instalado. No podremos extraer los subtítulos de ninguna forma!' >&2 | fold -w 70 ; exit 1
-elif ! [ -x "$(command -v unzip)" ]; then
-	echo 'unzip no está instalado. No podremos extraer los subtítulos de ninguna forma!' >&2; exit 1
-elif ! [ -x "$(command -v iconv)" ]; then
-	echo 'iconv no está instalado. Será imposible convertir los subtítulos a UTF y el script no funcionará' >&2; exit 1
-fi
-
-echo -e " \n${bold}Bienvenido/a a subcaretin!${normal} \n"
-
-function vacios {
-	if [[ -z "$links_listos" ]]; then
-		echo -e "${red}Sin resultados que se acerquen a tu archivo. Prueba una busqueda manual${normal}"; exit 1
-	fi
 }
 
-manual_dl() { 
-	if [ -e /tmp/output.zip ]; then
-		echo "Bajado"
-	else
-		echo -e " \n${red}Error al bajar!${normal} Vuelve a intentarlo. \n"; eliminar ; exit 1
-	fi
+function revisar_dep {
+    echo "Revisando dependencias..."
 
-	mkdir /tmp/srts
+    if ! [ -x "$(command -v unrar)" ]; then
+    	echo 'unrar no está instalado. No podremos extraer los subtítulos de ninguna forma!' >&2 | fold -w 70 ; exit 1
+    elif ! [ -x "$(command -v unzip)" ]; then
+    	echo 'unzip no está instalado. No podremos extraer los subtítulos de ninguna forma!' >&2; exit 1
+    elif ! [ -x "$(command -v iconv)" ]; then
+    	echo 'iconv no está instalado. Será imposible convertir los subtítulos a UTF y el script no funcionará' >&2; exit 1
+    fi
+}
+
+function existe {
+   	if [ -e /tmp/output.zip ]; then
+   		echo "Bajado"
+   	else
+   		echo -e "Error al bajar! Vuelve a intentarlo."
+        eliminar
+        exit 1
+    fi
+}
+
+function descomprimir {
+    mkdir /tmp/srts
 	echo "Probando con zip y rar..."
 	unrar e /tmp/output.zip /tmp/srts/ -inul
 	unzip -qqq /tmp/output.zip -d /tmp/srts/ 2> /dev/null
 	elige=$(ls /tmp/srts)
-	echo -e " \n${bold}Archivos descomprimidos: ${normal} \n"
+	echo -e " \nArchivos descomprimidos: \n"
 	nl -b a <(echo "$elige")
-	echo ""
-	read -p "Elige el número a conservar. (Si no sale nada, cierra con 'q' y vuele a intentar): " numero1
-	
-	if [ "$numero1" == "$salir" ]; then
-		echo "Limpiando..." ; eliminar; exit 1
-	fi
+}
 
-	lista1=$(sed $numero1!d <(echo "$elige"))
+function revisar_sub {
+    lista1=$(sed $numero1!d <(echo "$elige"))
 	puedeser=$(cat <(echo "$lista1"))
-	mv "/tmp/srts/$puedeser" /tmp/listo.srt
+	
+    mv "/tmp/srts/$puedeser" /tmp/listo.srt
 	echo -e " \nConvirtiendo a utf y renombrando... \n"
-        utf1="utf"
-        utf2=$(file -bi /tmp/listo.srt)
+        
+    utf1="utf"
+    utf2=$(file -bi /tmp/listo.srt)
         
 	if [[ "${utf2,,}" = *"${utf1,,}"* ]]; then
                 mv /tmp/listo.srt "$name.srt"
         else
                 iconv -f 8859_1 /tmp/listo.srt > "$name.srt"
-        fi
+    fi
 
 	if [ -e "$name.srt" ]; then
-		echo -e "${green}Subtítulo listo: $name.srt${normal} \n"
-        else
-		echo -e "${red}No encontramos el subtítulo! Vuelve a intentarlo${red} \n"; eliminar; exit 1
+		echo -e "Subtítulo listo: $name.srt\n"
+    else
+		echo -e "No encontramos el subtítulo! Vuelve a intentarlo$ \n"
+        eliminar
+        exit 1
 	fi
 	
-	echo -e "${bold}Revisando integridad del subtítulo...${normal}"
+	echo -e "Revisando integridad del subtítulo..."
 	
 	if [ -s "$name.srt" ]; then
-		echo -e " \n${green}Subtitulo en buen estado!${normal}"
-        else
-		echo -e " \n${red}El archivo del subtítulo está vacío.${normal}\nIntenta descargarlo de nuevo y si el problema persiste baja otro
+		echo -e " \nSubtitulo en buen estado!"
+    else
+		echo -e " \nEl archivo del subtítulo está vacío. \nIntenta descargarlo de nuevo y si el problema persiste baja otro
          y repórtalo en Subdivx"; eliminar; exit 1 
 	fi
 }
 
-read -p "Escribe el nombre o palabras clave de la pelicula o episodio que buscas: " pelicula
+function manual_dl { 
+    existe
+    descomprimir
+	echo ""
+	read -p "Elige el número a conservar. (Si no sale nada, cierra con 'q' y vuele a intentar): " numero1
+    revisar_sub
+}
 
-extraido1=$(echo "${pelicula// /+}")
-
-echo -e " \nBuscando en Subdivx y Argenteam... \n"
-
-api_search="http://argenteam.net/api/v1/search"
-api_episode="http://argenteam.net/api/v1/episode"
-api_movie="http://argenteam.net/api/v1/movie"
-
-conca=$(wget -O - "$api_search?q=$extraido1" -q | jq -r '.results[] | "\(.id),\(.type)"')
-
-if [[ -z "${conca}" ]]; then
-	touch /tmp/resultados /tmp/links
-else
-	lista_arg=$(while IFS= read -r line
-        do
-	if [[ "$line" == *"movie"* ]]; then
-		id_arg=$(echo "$line" | sed 's/[^0-9]*//g')
-		da_curl=$(wget -O - "$api_movie?id=$id_arg" -q)
-		links_listos=$(jq -r '.releases[] .subtitles[] .uri' <(echo "$da_curl"))
-		if [[ -n ${links_listos} ]]; then
-			elegir_descarga=$(jq -r '.releases[] | "\(.source); \(.codec); \(.team); vsize: \(.size) subtitulos: \(.subtitles[] .uri)"' <(echo "$da_curl"))
-			titulo_a=$(jq .title <(echo "$da_curl"))
-		fi
-
-	elif [[ "$line" == *"episode"* ]]; then
-		id_arg=$(echo "$line" | sed 's/[^0-9]*//g')
-		da_curl=$(wget -O - "$api_movie?id=$id_arg")
-		links_listos=$(jq -r '.releases[] .subtitles[] .uri' <(echo "$da_curl"))
-		if [[ -n ${links_listos} ]]; then
-			elegir_descarga=$(jq -r '.releases[] | "\(.source); \(.codec); \(.team); vsize: \(.size) subtitulos: \(.subtitles[] .uri)"' <(echo "$da_curl"))
-			titulo_a=$(jq '"\(.title) (S0\(.season)E\(.number))"' <(echo "$da_curl"))
-		fi
-	fi
-
-	echo "$elegir_descarga"| sed "s/^/$titulo_a: /"	
-done < <(echo "$conca"))
-
-lista_arg2=$(echo "$lista_arg" | sed '/^\:*:/d' | sed "s/^/[Argenteam] /")
-echo "$lista_arg2" | sed 's/\ subtitulos.*//' > /tmp/resultados
-echo "$lista_arg2" | grep -Eo 'http://[^ >]+' | sed 's/"//' > /tmp/links
-fi
-
-pagina=$(wget -O - "http://www.subdivx.com/index.php?q=$pelicula&accion=5&masdesc=&subtitulos=1&realiza_b=1" -q)
-descripciones=$(iconv -f 8859_1 <(echo "$pagina") | grep -oP '(?<=<div id="buscador_detalle_sub">)[^<]*')
-titulos=$(iconv -f 8859_1 <(echo "$pagina") | grep -oP '(?<=<a class="titulo_menu_izq" href=)[^<]*' | sed -e 's!http[s]\?://\S*"!!g')
-links_subd=$(iconv -f 8859_1 <(echo "$pagina") | grep -oP '(?<=<a class="titulo_menu_izq" href=)[^<]*' | grep -oP 'http.?://\S+"' | sed 's/\"//')
-links_subd1=$(cat <(echo "$links_subd"))
-resultados_sub=$(paste <(echo "$titulos") <(echo "$descripciones"))
-
-echo "$resultados_sub" >> /tmp/resultados
-echo "$links_subd1" >> /tmp/links
-echo -e "${bold}Resultados:${normal}"
-
-nl -b a /tmp/resultados
-rm -f /tmp/resultados
-
-echo ""
-read -p "Elige el numero del subtitulo a bajar ('q' para salir): " numero
-salir="q"
-
-if [ "$numero" == "$salir" ]; then
-        echo "Limpiando..."; eliminar; exit 1
-fi
-
-link=$(sed $numero!d /tmp/links)
-rm -f /tmp/links
-
-if [[ "$link" == *"argenteam"* ]]; then
-	titulo_sub=$(sed $numero!d <(echo "$lista_arg2"))
-	echo -e "\n${cyan}Se bajarán: $titulo_sub${normal} \n" | sed 's/\ subtitulos.*//'
-	echo "${bold}Bajando subtítulo...${normal}"
-	wget -O /tmp/output.zip -i <(echo "$link") -q
-	manual_dl
-else
-	echo "Consiguiendo link..."
+function bajar_subdivx {
+    echo "Consiguiendo link..."
 	conseguido=$(wget -O - -i <(echo "$link") -q)
 	conseguido_iso=$(iconv -f 8859_1 <(echo "$conseguido"))
 	bajar=$(grep -oP '(?<= href=")[^"]+' <(echo "$conseguido") | grep bajar)
@@ -190,10 +113,109 @@ else
 	echo -e "${bold}Bajando subtítulo...${normal}"
 	wget -O /tmp/output.zip --referer http://www.subdivx.com/ -i <(echo "$bajar") -q
 	manual_dl
-fi
+}
 
-eliminar
-	
-echo -e " \n${bold}Listo${normal}"
+function bajar_argenteam {
+    titulo_sub=$(sed $numero!d <(echo "$lista_arg2"))
+	echo -e "\n${cyan}Se bajarán: $titulo_sub${normal} \n" | sed 's/\ subtitulos.*//'
+	echo "${bold}Bajando subtítulo...${normal}"
+	wget -O /tmp/output.zip -i <(echo "$link") -q
+	manual_dl
+}
 
-exit 1
+function busqueda {
+    read -p "Escribe el nombre o palabras clave de la pelicula o episodio que buscas: " pelicula
+
+    extraido1=$(echo "${pelicula// /+}")
+    
+    echo -e " \nBuscando en Subdivx y Argenteam... \n"
+}
+
+function argenteam {
+    api_search="http://argenteam.net/api/v1/search"
+    api_episode="http://argenteam.net/api/v1/episode"
+    api_movie="http://argenteam.net/api/v1/movie"
+
+    conca=$(wget -O - "$api_search?q=$extraido1" -q | jq -r '.results[] | "\(.id),\(.type)"')
+
+    if [[ -z "${conca}" ]]; then
+    	touch /tmp/resultados /tmp/links
+    else
+    	lista_arg=$(while IFS= read -r line
+            do
+    	if [[ "$line" == *"movie"* ]]; then
+    		id_arg=$(echo "$line" | sed 's/[^0-9]*//g')
+    		da_curl=$(wget -O - "$api_movie?id=$id_arg" -q)
+    		links_listos=$(jq -r '.releases[] .subtitles[] .uri' <(echo "$da_curl"))
+    		if [[ -n ${links_listos} ]]; then
+    			elegir_descarga=$(jq -r '.releases[] | "\(.source); \(.codec); \(.team); vsize: \(.size) subtitulos: \(.subtitles[] .uri)"' <(echo "$da_curl"))
+    			titulo_a=$(jq .title <(echo "$da_curl"))
+    		fi
+    
+    	elif [[ "$line" == *"episode"* ]]; then
+    		id_arg=$(echo "$line" | sed 's/[^0-9]*//g')
+    		da_curl=$(wget -O - "$api_movie?id=$id_arg")
+    		links_listos=$(jq -r '.releases[] .subtitles[] .uri' <(echo "$da_curl"))
+    		if [[ -n ${links_listos} ]]; then
+    			elegir_descarga=$(jq -r '.releases[] | "\(.source); \(.codec); \(.team); vsize: \(.size) subtitulos: \(.subtitles[] .uri)"' <(echo "$da_curl"))
+    			titulo_a=$(jq '"\(.title) (S0\(.season)E\(.number))"' <(echo "$da_curl"))
+    		fi
+    	fi
+
+    	echo "$elegir_descarga"| sed "s/^/$titulo_a: /"	
+    done < <(echo "$conca"))
+
+    lista_arg2=$(echo "$lista_arg" | sed '/^\:*:/d' | sed "s/^/[Argenteam] /")
+    echo "$lista_arg2" | sed 's/\ subtitulos.*//' > /tmp/resultados
+    echo "$lista_arg2" | grep -Eo 'http://[^ >]+' | sed 's/"//' > /tmp/links
+    fi
+}
+function subdivx1 {
+    pagina=$(wget -qO- "http://www.subdivx.com/index.php?q=$pelicula&accion=5&masdesc=&subtitulos=1&realiza_b=1")
+    descripciones=$(iconv -f 8859_1 <(echo "$pagina") | grep -oP '(?<=<div id="buscador_detalle_sub">)[^<]*')
+    titulos=$(iconv -f 8859_1 <(echo "$pagina") | grep -oP '(?<=<a class="titulo_menu_izq" href=)[^<]*' | sed -e 's!http[s]\?://\S*"!!g')
+    links_subd=$(iconv -f 8859_1 <(echo "$pagina") | grep -oP '(?<=<a class="titulo_menu_izq" href=)[^<]*' | grep -oP 'http.?://\S+"' | sed 's/\"//')
+    links_subd1=$(cat <(echo "$links_subd"))
+    resultados_sub=$(paste <(echo "$titulos") <(echo "$descripciones"))
+}
+
+
+function resultado {
+    echo "$resultados_sub" >> /tmp/resultados
+    echo "$links_subd1" >> /tmp/links
+    echo -e "Resultados:"
+
+    nl -b a /tmp/resultados
+    rm -f /tmp/resultados
+
+    echo ""
+    read -p "Elige el numero del subtitulo a bajar ('q' para salir): " numero
+    salir="q"
+
+    if [ "$numero" == "$salir" ]; then
+        echo "Limpiando..."; eliminar; exit 1
+    fi
+    link=$(sed $numero!d /tmp/links)
+    rm -f /tmp/links
+}
+
+
+function main {
+    entrada
+    eliminar
+    revisar_dep
+    busqueda
+    argenteam
+    subdivx1
+    resultado
+    
+    if [[ "$link" == *"argenteam"* ]]; then
+        bajar_argenteam
+    else
+        bajar_subdivx
+    fi
+
+    eliminar
+}
+
+main
