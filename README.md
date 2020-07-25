@@ -1,6 +1,6 @@
 # subcaretin-manual
 
-`subcaretin` busca, descarga, extrae y renombra subtítulos de Subdivx y Argenteam. Todo manual.
+`subcaretin` busca, descarga, extrae y renombra subtítulos de Subdivx y Argenteam.
 
 > Nota: para búsquedas y descargas automáticas, visita [subcaretin-auto](https://github.com/vitiko123/subcaretin-auto)
 
@@ -34,7 +34,7 @@ Buscando subtítulos...
 6: Subtitulos de Taxi Driver (1976) - para la version de "zeus diaz" que ocupa 700 mb
 7: Subtitulos de Taxi Driver (1976) - a este lo bake del donkey, esta coordinado con la version que tewngo de 706 3 mb que comienza directamente con los titulos de la columbia, aparte estan corregidas las letras z que aparecian el algunas partes remplazando a la a, a diferencia de las demas e
 8: Subtitulos de Taxi Driver (1976) - son los de leanlestat  ajustados para "taxi driver 1976 720p  dts x264 ebp"
-(..)
+(...)
 
 Elige el número a descargar:
 - 3
@@ -53,5 +53,5 @@ Subtítulo descargado correctamente: Taxi.Driver.1976.Bluray.x264.es.srt
 
 ## Miscelánea
 
-* Para mejorar la compatibilidad, este script fue reescrito en Python el 25 de Julio de 2020. Anteriormente fue un bash script. Puedes encontrarlo en la historia del repositorio.
+* Para mejorar la compatibilidad, este script fue reescrito en Python el 25 de Julio de 2020. Anteriormente fue un bash script. Puedes encontrarlo en la historia del repositorio
 * Mi subdivx: https://www.subdivx.com/X9X2117299
