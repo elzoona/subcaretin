@@ -1,6 +1,6 @@
 # subcaretin-manual
 
-`subcaretin` busca, descarga, extrae y renombra subtítulos de Subdivx y Argenteam.
+`subcaretin` busca, descarga, extrae y renombra subtítulos de Subdivx y Argenteam
 
 > Nota: para búsquedas y descargas automáticas, visita [subcaretin-auto](https://github.com/vitiko123/subcaretin-auto)
 
@@ -17,7 +17,9 @@ Primero, instala los módulos necesarios con pip. Este comando depende de la con
 pip3 install -r requirements.txt --user
 ```
 
-Correr el script con tu intérprete de python. Dependiendo de tu OS, puede ser 'python' o 'python3'. En mi caso es python3 (recorto los resultados para no saturar el README):
+## Comenzar
+
+Luego, corre el script con tu intérprete de python. Dependiendo de tu OS, puede ser 'python' o 'python3'. En mi caso es python3 (recorto los resultados para no saturar el README):
 ```console
 [xd@arch subcaretin]$ python3 subcaretin.py Taxi.Driver.1976.Bluray.x264.mkv
 
@@ -53,5 +55,5 @@ Subtítulo descargado correctamente: Taxi.Driver.1976.Bluray.x264.es.srt
 
 ## Miscelánea
 
-* Para mejorar la compatibilidad, este script fue reescrito en Python el 25 de Julio de 2020. Anteriormente fue un bash script. Puedes encontrarlo en la historia del repositorio
+* Para mejorar la compatibilidad, este script fue reescrito en Python el 25 de Julio de 2020. Anteriormente fue un bash script. Puedes encontrarlo en la historia del repositorio. Eso sí: el historial de commits es un desastre
 * Mi subdivx: https://www.subdivx.com/X9X2117299
