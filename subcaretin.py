@@ -158,7 +158,7 @@ def main():
     argenteam(name)
     subdivx(name)
     total = arg_subd()
-    elegido = elegir(total)
+    elegir(total)
     descomprimir()
 
 if __name__ == '__main__':
