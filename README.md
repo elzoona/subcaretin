@@ -4,7 +4,7 @@
 
 ## Características
 
-`subcaretin` tiene un modo automático y otro manual. Cada modo opera así:
+`subcaretin` soporta películas y epsiodios. Tiene un modo automático y otro manual. Cada modo opera así:
 
 ### Automático (por defecto)
 
@@ -49,7 +49,7 @@ Argumentos opcionales:
   -m          activar el modo manual (desactivado por defecto)
   -l int      el límite de resultados (ilimitado por defecto)
   -p int      puntaje mínimo para descargar subtítulos automáticamente (3 por defecto)
-  -f          de existir, sobreescribir subtítulo descargado
+  -f          de existir, sobrescribir subtítulo descargado
 ```
 ## Ejemplo del modo automático
 ```console
@@ -91,12 +91,13 @@ Elige el número del archivo a extraer:
 Subtítulo descargado correctamente: Taxi.Driver.1976.Bluray.x264.es.srt
 ```
 ## Eficacia
-`subcaretin` tiene una serie de filtros específicamente optimizados para las búsquedas en Argenteam y Subdivx. De esta forma apunta a ser más eficaz que aplicaciones similares de subtítulos
+`subcaretin` tiene una serie de filtros específicamente optimizados para las búsquedas en Argenteam y Subdivx, por lo que apunta a ser más eficaz que aplicaciones similares de subtítulos. De cualquier forma, mientras mejor estén nombrados tus archivos de vídeo, mejores resultados podrá ofrecer este script.
 ## TODO
 * Mejorar los filtros
 * Descargar por carpetas
 * Corregir el estilo del código
 * Mejorar el manejo de errores
+* Agregar más proveedores (?)
 ## Miscelánea
 * Para mejorar la compatibilidad, este script fue reescrito en Python a partir del 25 de Julio de 2020. Anteriormente fue un bash script. Puedes encontrar la versión obsoleta en las branches
 * Mi subdivx: https://www.subdivx.com/X9X2117299
