@@ -1,5 +1,0 @@
-requests
-guessit
-beautifulsoup4
-python-magic
-unrar

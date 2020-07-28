@@ -5,8 +5,8 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="subcaretin",
-    version="0.1.0",
-    scripts=['bin/subcaretin'],
+    version="0.1.3",
+    scripts=['subcaretin/subcaretin'],
     author="Vitiko",
     author_email="vhnz98@gmail.com",
     description="Descarga automática de subtítulos desde Argenteam y Subdivx",
