@@ -1,12 +1,12 @@
 # subcaretin
 
-`subcaretin` ofrece la forma más efectiva de descargar automáticamente subtítulos en español. Busca, descarga, extrae y renombra subtítulos de Subdivx y Argenteam.
+`subcaretin` ofrece la forma más efectiva y rápida de descargar automáticamente subtítulos en español.
 
 ## Características
 
-Ambos modos obtienen subtítulos de Subdivx y Argenteam. Cada modo opera así:
+`subcaretin` tiene un modo automático y otro manual. Cada modo opera así:
 
-### Automático
+### Automático (por defecto)
 
 * Incorpora el excelente reconocimiento de metadatos de vídeo por parte de [guessit](https://github.com/guessit-io/guessit)
 * Utiliza un algoritmo simple para ordenar de mejor a peor los resultados de acuerdo a los datos obtenidos por guessit
@@ -36,6 +36,7 @@ pip3 install -r requirements.txt
 python3 setup.py install --user
 ```
 Ahora, `subcaretin` está listo
+> Nota: python-unrar requiere la librería de unrar instalada en tu sistema, por lo que puede que te salten errores a la hora de importarlo. Es recomendable que instales el paquete adecuado para tu distribución. Por ejemplo, `python3-unrar` en Debian y `python-unrar` en Arch Linux. Más información: [python-unrar](https://github.com/matiasb/python-unrar)
 ## Uso
 ```
 Uso: subcaretin [-h] [-m] [-l int] [-p int] [-f] VIDEO
@@ -61,7 +62,7 @@ Subtítulo descargado correctamente: True.Detective.S01E01.WEB.x264.720p.AAC.es.
 ```
 ## Ejemplo del modo manual
 ```console
-[victor@arch]$ subcaretin -m -l 9 Taxi.Driver.1976.Bluray.x264.mkv
+[victor@arch]$ subcaretin -m -l 7 Taxi.Driver.1976.Bluray.x264.mkv
 
 Introduce el nombre de la película y su año:
 - Taxi Driver 1976
@@ -74,8 +75,6 @@ Buscando subtítulos...
 4: Subtitulos de Taxi Driver (1976) - son para la nueva versión taxi driver 1976 1080p  x264-amiable  tome los que subió jfca283 (leanlestat) "taxi driver 1976 720p  dts x264 ebp" y los resincronicé  espero les sirva
 5: Subtitulos de Taxi Driver (1976) - sirve para taxi driver [bdrip-1080p-multilang-multisub-chapters][rip by max]
 6: Subtitulos de Taxi Driver (1976) - para la version de "zeus diaz" que ocupa 700 mb
-7: Subtitulos de Taxi Driver (1976) - a este lo bake del donkey, esta coordinado con la version que tewngo de 706 3 mb que comienza directamente con los titulos de la columbia, aparte estan corregidas las letras z que aparecian el algunas partes remplazando a la a, a diferencia de las demas e
-8: Subtitulos de Taxi Driver (1976) - son los de leanlestat  ajustados para "taxi driver 1976 720p  dts x264 ebp"
 (...)
 
 Elige el número a descargar:
@@ -92,7 +91,7 @@ Elige el número del archivo a extraer:
 Subtítulo descargado correctamente: Taxi.Driver.1976.Bluray.x264.es.srt
 ```
 ## Eficacia
-`subcaretin` tiene una serie de filtros específicamente optimizados para las búsquedas en Argenteam y Subdivx, por lo que apunta a ser más eficaz que aplicaciones similares de subtítulos
+`subcaretin` tiene una serie de filtros específicamente optimizados para las búsquedas en Argenteam y Subdivx. De esta forma apunta a ser más eficaz que aplicaciones similares de subtítulos
 ## TODO
 * Mejorar los filtros
 * Descargar por carpetas
