@@ -24,12 +24,7 @@ El cálculo de puntajes está inspirado en subliminal. En orden de importancia, 
 
 * El modo manual espera la interacción del usuario/usuaria en la búsqueda, la elección del subtítulo a descargar y la elección del archivo a extraer
  
-## Alistar uso
-Primero, instala las dependencias con pip:
-```
-pip3 install requests guessit beautifulsoup4 unrar python-magic --user
-```
-Luego, instala `subcaretin` a través de pip:
+## Instalar
 ```
 pip3 install subcaretin --user
 ```
@@ -44,12 +39,6 @@ Ahora, `subcaretin` está listo
 ## Uso
 ```
 Uso: subcaretin [-h] [-m] [-l int] [-p int] [-f] VIDEO
-
-descarga subtítulos de forma automática o manual desde Subdivx y Argenteam
-
-Ejemplos:
-subcaretin Taxi.Driver.1976.Bluray.x264.mkv
-subcaretin -m -l 5 Taxi.Driver.1976.Bluray.x264.mkv
 
 Argumento posicional obligatorio:
   VIDEO       el archivo de video de referencia
@@ -103,7 +92,7 @@ Elige el número del archivo a extraer:
 Subtítulo descargado correctamente: Taxi.Driver.1976.Bluray.x264.es.srt
 ```
 ## Eficacia
-`subcaretin` tiene una serie de filtros específicamente optimizados para las búsquedas en Argenteam y Subdivx, por lo que apunta a ser más eficaz que aplicaciones similares de subtítulos.
+`subcaretin` tiene una serie de filtros específicamente optimizados para las búsquedas en Argenteam y Subdivx, por lo que apunta a ser más eficaz que aplicaciones similares de subtítulos
 ## TODO
 * Mejorar los filtros
 * Descargar por carpetas
