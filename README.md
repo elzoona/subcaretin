@@ -4,7 +4,7 @@
 
 ## Características
 
-`subcaretin` soporta películas y epsiodios. Tiene un modo automático y otro manual. Cada modo opera así:
+`subcaretin` soporta búsquedas en Argenteam y Subdivx de películas y epsiodios. Tiene un modo automático y otro manual; cada modo opera así:
 
 ### Automático (por defecto)
 
