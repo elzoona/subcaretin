@@ -1,4 +1,4 @@
-import sys
+from operator import itemgetter
 
 # SubFiltro devuelve cinco listas. Todas son filtradas para evitar que
 # subcaretin descargue archivos no deseados o perjudiciales en el modo
@@ -16,63 +16,37 @@ filtroSubdivx = ("dvds|pack|Pack|PACK|DVDS|DVDs|partes|PARTES|Partes|cds|"
 
 filtroList = filtroSubdivx.split("|")
 
-coincidencias = []
-titulosFilt = []
-descripcionesFilt = []
-linksFilt = []
-porFiltrar = []
-filtrado = []
+class Filtro:
+    def __init__(self, movies, attrs):
+        self.movies = movies
+        self.attrs = attrs
 
+        # Las descripciones de Subdivx vienen en minúsuclas por defecto, pero
+        # las de Argenteam no
+        for each in self.movies:
+            each['description'] = each['description'].lower()
+            if any(x in each['description'] for x in filtroList):
+                self.movies.remove(each)
 
-def SubFiltro(titulos, descripciones, links, sourceList, codecList, \
-              audioList, resolutionList):
-    # Las descripciones de Subdivx vienen en minúsuclas por defecto, pero
-    # las de Argenteam no
-    desLower = [objeto.lower() for objeto in descripciones]
-    
-    for each in range(len(titulos)):
-        porFiltrar.append('%s|%s|%s'
-                          % (titulos[each], desLower[each], links[each]))
+        for cada in range(len(self.movies)):
+            scoreSource = 0
+            scoreCodec = 0
+            scoreAudio = 0
+            scoreResolution = 0
+            score = 0
 
-    for cada in porFiltrar:
-        if any(x in cada for x in filtroList):
-            porFiltrar.remove(cada)
+            if any(y in self.movies[cada]['description'] for y in self.attrs['source']):
+                scoreSource = 7
+            if any(y in self.movies[cada]['description'] for y in self.attrs['codec']):
+                scoreCodec = 3
+            if any(y in self.movies[cada]['description'] for y in self.attrs['audio']):
+                scoreAudio = 3
+            if any(y in self.movies[cada]['description'] for y in attrs['resol']):
+                scoreResolution = 2
+            if any(y in self.movies[cada]['title'] for y in attrs['year']):
+                scoreResolution = 2
 
-    for cada1 in range(len(porFiltrar)):
-        scoreSource = 0
-        scoreCodec = 0
-        scoreAudio = 0
-        scoreResolution = 0
-        scoreTotal = 0
+            score = scoreSource + scoreCodec + scoreAudio + scoreResolution
+            self.movies[cada]['score'] = score
 
-        if any(y in porFiltrar[cada1] for y in sourceList):
-            scoreSource = 7
-        if any(y in porFiltrar[cada1] for y in codecList):
-            scoreCodec = 3
-        if any(y in porFiltrar[cada1] for y in audioList):
-            scoreAudio = 3
-        if any(y in porFiltrar[cada1] for y in resolutionList):
-            scoreResolution = 2
-
-        scoreTotal = scoreSource + scoreCodec + scoreAudio + scoreResolution
-
-        porFiltrar[cada1] = '%s|%s' % (scoreTotal, porFiltrar[cada1])
-
-    porFiltrarSorted = sorted(porFiltrar, reverse = True)
-
-    for cada1 in porFiltrarSorted:
-        listaTemp = cada1.split("|")
-        coincidencias.append(listaTemp[0])
-        titulosFilt.append(listaTemp[1])
-        descripcionesFilt.append(listaTemp[2])
-        linksFilt.append(listaTemp[3])
-
-    for number in range(len(titulosFilt)):
-        filtrado.append('%s - %s'
-                        % (titulosFilt[number], descripcionesFilt[number]))
-    if not filtrado:
-        print('Sin resultados\n')
-        sys.exit()
-    else:
-        return filtrado, coincidencias, titulosFilt, descripcionesFilt, \
-            linksFilt
+        self.movies = sorted(self.movies, key=itemgetter('score'), reverse=True)

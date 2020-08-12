@@ -1,74 +1,85 @@
 from guessit import guessit
 import sys
 
-def Adivinar(film):
-    try:
-        guess = guessit(film, '-s')
-    except:
-        print('Error reconociendo el archivo. Prueba el modo manual')
 
-    if (guess['type']) == 'episode':
-        title = str(guess['title']).replace(" ", "+")
-        season = "{:02d}".format(int(guess['season']))
-        episode = "{:02d}".format(int(guess['episode']))
-        source = guess.get('source', '')
-        codec = guess.get('video_codec', '')
-        audio = guess.get('audio_codec', '')
-        resolution = guess.get('screen_size', '')
-        paraBuscar = '%s+S%sE%s' % (title, season, episode)
-        return paraBuscar, source, codec, audio, resolution
-    else:
-        paraBuscar = str(guess['title']).replace(" ", "+")
-        try:
-            year = guess['year']
-        except:
-            print('Tu video no tiene información suficiente para una búsqueda'
-                  ' automática')
-            sys.exit()
-        source = guess.get('source', '')
-        codec = guess.get('video_codec', '')
-        audio = guess.get('audio_codec', '')
-        resolution = guess.get('screen_size', '')
-        return paraBuscar, year, source, codec, audio, resolution
+class Video:
+    def __init__(self, file):
+        guess = guessit(file, '-s')
+        self.year = ''
+        if (guess['type']) == 'episode':
+            self.main = str(guess['title']).replace(" ", "+")
+            self.season = "{:02d}".format(int(guess['season']))
+            self.episode = "{:02d}".format(int(guess['episode']))
+            self.source = guess.get('source', '')
+            self.codec = guess.get('video_codec', '')
+            self.audio = guess.get('audio_codec', '')
+            self.resolution = guess.get('screen_size', '')
+            self.busqueda = '%s+S%sE%s' % (self.main, self.season, self.episode)
+        else:
+            self.busqueda = str(guess['title']).replace(" ", "+")
+            try:
+                self.year = guess['year']
+            except KeyError:
+                sys.exit('Tu video no tiene información suficiente para una '
+                         'búsqueda automática')
+            self.source = guess.get('source', '')
+            self.codec = guess.get('video_codec', '')
+            self.audio = guess.get('audio_codec', '')
+            self.resolution = guess.get('screen_size', '')
 
-def palabrasClave(source, codec, audio, resolution):
-    sourceList = []
-    codecList = [] 
-    audioList = []
-    resolutionList = [] 
+    def get_keywords(self):
+        sources = {
+            'Blu-ray': ['bluray', 'blu-ray', 'bdrip', 'bd-rip', 'brrip',
+                        'br-rip', 'blu ray', 'bdrip'],
+            'DVD': ['dvdrip', '.dvd.', 'dvd-r', 'ntsc', ' dvd ', ' pal '],
+            'Web': ['web-dl', 'web-rip', 'webdl', ' web ', '.web.', '.web',
+                    'web.', 'webrip'],
+            'HDTV': ['hdtv', 'screen-tv', 'hc-rip'],
+            '': []
+        }
 
-    if 'Blu-ray' == source:
-        sourceList = ['bluray', 'blu-ray', 'bdrip', 'bd-rip', 'brrip',
-                      'br-rip', 'blu ray', 'bdrip']
-    elif 'DVD' == source:
-        sourceList = ['dvdrip', '.dvd.', 'dvd-r', 'ntsc', ' dvd ', ' pal ']
-    elif 'Web' == source:
-        sourceList = ['web-dl', 'web-rip', 'webdl', ' web ', '.web.', '.web',
-                      'web.', 'webrip']    
-    elif 'HDTV' == source:
-        sourceList = ['hdtv', 'screen-tv']
+        codecs = {
+            'H.264': ['264', 'avc'],
+            'H.265': ['265', 'hevc'],
+            'Divx': [' divx ', '.divx.', '-divx'],
+            'Xvid': ['xvid'],
+            'DVDivX': ['DVDivx'],
+            'VP7': ['vp7'],
+            'VP9': ['vp9'],
+            '': []
+        }
 
-    if 'H.264' == codec:
-        codecList = ['264', 'avc']
-    elif 'H.265' == codec:
-        codecList = ['265', 'hevc']
-    elif 'Divx' == codec:
-        codecList = [' divx ', '.divx.', '-divx']
-    elif 'Xvid' == codec:
-        codecList = ['xvid']
-    
-    if 'Dolby Digital' == audio or 'Dolby Digital Plus' == audio:
-        audioList = ['dolby', '.dd', '-dd', 'dd-', 'd.d', ' dd ', 'ac3']
-    elif 'FLAC' == audio:
-        audioList = ['flac', 'lossless']
-    elif 'AAC' == audio:
-        audioList = [' aac ', '.aac', 'aac.', '-aac', 'aac-']
-    elif 'DTS' == audio:
-        audioList = ['dts']
+        audio_codecs = {
+            'Dolby Digital': ['dolby', '.dd', '-dd', 'dd-', 'd.d', ' dd ',
+                              'ac3'],
+            'Dolby Digital Plus': ['dolby', '.dd', '-dd', 'dd-', 'd.d',
+                                   ' dd ', 'ac3'],
+            'FLAC': ['flac', 'lossless'],
+            'AAC': [' aac ', '.aac', 'aac.', '-aac', 'aac-'],
+            'DTS': ['dts'],
+            'EAC3': ['EAC3'],
+            'LPCM': ['LPCM'],
+            'MP3': ['mp3'],
+            'MP2': ['MP2'],
+            'Opus': ['Opus'],
+            'PCM': ['PCM'],
+            'Vorbis': ['Vorbis'],
+            '': []
+        }
 
-    if '1080p' == resolution or '720p' == resolution or '576p' == resolution:
-        resolutionList = ['1080', '720', '576', '4k', '2k', 'full hd']
-    elif '480p' == resolution:
-        resolutionList = ['480', '360']
+        resolutions = {
+            '1080p': ['1080', '720', '576', '4k', '2k', 'full hd'],
+            '720p': ['1080', '720', '576', '4k', '2k', 'full hd'],
+            '576p': ['1080', '720', '576', '4k', '2k', 'full hd'],
+            '480p': ['480', '360'],
+            '2160p': ['4k, 2160p'],
+            '': []
+        }
 
-    return sourceList, codecList, audioList, resolutionList
+        return {
+            'year': '({})'.format([self.year]),
+            'resol': resolutions[self.resolution],
+            'source': sources[self.source],
+            'audio':audio_codecs[self.audio],
+            'codec': codecs[self.codec]
+        }
