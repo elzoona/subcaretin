@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="subcaretin",
-    version="0.1.3",
+    version="0.2",
     scripts=['subcaretin/subcaretin'],
     author="Vitiko",
     author_email="vhnz98@gmail.com",
@@ -18,6 +18,7 @@ setuptools.setup(
         "guessit",
         "beautifulsoup4",
         "python-magic",
+        "python_magic",
         "unrar"
     ],
     packages=setuptools.find_packages(),
