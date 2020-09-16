@@ -68,8 +68,12 @@ def descargar(conseguido, temp):
             printSub()
             link = requests.get(conseguido['url'])
             sopa = bso(link.content, 'html.parser')
-            descargar = sopa.find('a', class_='link1')['href']
-            comprimido = requests.get(descargar, allow_redirects=True)
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36",
+                "referer": 'https://subdivx.com'
+            }
+            descargar = 'http://www.subdivx.com/' + sopa.find('a', class_='link1')['href']
+            comprimido = requests.get(descargar, headers=headers, allow_redirects=True)
             open(temp + '/subs', 'wb').write(comprimido.content)
         return True
     except requests.exceptions.Timeout:
