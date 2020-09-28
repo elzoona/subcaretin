@@ -16,9 +16,9 @@ def get(file, argenteam=True, subdivx=True, lista=False, array=0):
         try:
             return filtrado.movies[array]
         except IndexError:
-            return False
+            return
     else:
         if filtrado.movies:
             return filtrado.movies
         else:
-            return False
+            return

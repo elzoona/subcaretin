@@ -77,9 +77,9 @@ def descargar(conseguido, temp):
             open(temp + '/subs', 'wb').write(comprimido.content)
         return True
     except requests.exceptions.Timeout:
-        return False
+        return
     except requests.exceptions.TooManyRedirects:
-        return False
+        return
 
 
 def descomprimirTipo(extractor, auto, temp, dest):
@@ -99,7 +99,6 @@ def descomprimirTipo(extractor, auto, temp, dest):
         source = temp + '/' + nombre[eleccion]
     except IndexError:
         sys.exit('Número inválido')
-
     zipped.extract(nombre[eleccion], temp + '/')
     shutil.move(source, dest)
 
@@ -129,17 +128,12 @@ def descomprimir(dest, temp, auto=True):
                      'instales el paquete adecuado para tu distribución. Por'
                      'ejemplo, python3-unrar en Debian y python-unrar en Arch'
                      'Linux. Más información: https://github.com/matiasb/python-unrar')
-
         descomprimirTipo(rarfile.RarFile, auto, temp, dest)
 
-    if existe(dest):
-        return True
-    else:
-        return False
+    return existe(dest)
 
 
 def main():
-    # conseguir los argumentos
     arguments = args()
     # información del archivo
     movie_name = arguments.VIDEO
