@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="subcaretin",
-    version="0.2",
+    version="0.2.3",
     scripts=['subcaretin/subcaretin'],
     author="Vitiko",
     author_email="vhnz98@gmail.com",

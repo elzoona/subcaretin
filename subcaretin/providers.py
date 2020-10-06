@@ -64,7 +64,7 @@ class Subtitles:
                     moviePag = requests.get('{}?id={}'.format(api_movie, arg_id))
                     get_arg_links(moviePag)
                 else:
-                    moviePag = requests.get('{}?id={}'.append(api_episode, arg_id))
+                    moviePag = requests.get('{}?id={}'.format(api_episode, arg_id))
                     get_arg_links(moviePag)
             except AttributeError:
                 print("Sin resultados en Argenteam")
