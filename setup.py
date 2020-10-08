@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 setuptools.setup(
     name="subcaretin",
     version="0.2.3",
-    scripts=['subcaretin/subcaretin'],
+    scripts=["subcaretin/subcaretin"],
     author="Vitiko",
     author_email="vhnz98@gmail.com",
     description="Descarga automática de subtítulos desde Argenteam y Subdivx",
@@ -19,7 +19,7 @@ setuptools.setup(
         "beautifulsoup4",
         "python-magic",
         "python_magic",
-        "unrar"
+        "unrar",
     ],
     packages=setuptools.find_packages(),
     classifiers=[
@@ -27,5 +27,5 @@ setuptools.setup(
         "License :: OSI Approved :: GNU General Public License (GPL)",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.6',
+    python_requires=">=3.6",
 )

@@ -11,7 +11,7 @@ def get(file, argenteam=True, subdivx=True, lista=False, array=0):
     buscar = providers.Subtitles(from_filename.busqueda)
     buscar.get_subtitles(argenteam, subdivx, 30)
     movies = buscar.Subs
-    filtrado = filtros.Filtro(movies['items'], keywords)
+    filtrado = filtros.Filtro(movies["items"], keywords)
     if not lista:
         try:
             return filtrado.movies[array]
@@ -20,5 +20,3 @@ def get(file, argenteam=True, subdivx=True, lista=False, array=0):
     else:
         if filtrado.movies:
             return filtrado.movies
-        else:
-            return
