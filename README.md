@@ -1,6 +1,6 @@
 # subcaretin
 
-`subcaretin` ofrece la forma más efectiva y rápida de descargar automáticamente subtítulos en español.
+`subcaretin` ofrece una forma efectiva y rápida de descargar automáticamente subtítulos en español.
 
 ## Características
 
@@ -110,13 +110,3 @@ De la misma forma, si estás buscando sin la necesidad de filtros:
 >>> subs.Subs
 {'items': [{'title': 'Boze Cialo (2019) aka Corpus Christi', 'description': 'excelente pèlicula polaca  para \r\ncorpus christi 2019 1080p  x264-rovers[ethd], de 10,3 g', 'url': 'http://www.subdivx.com/X6XNTg2NDQ2X-boze-cialo-2019-aka-corpus-christi.html', 'provider': 'subdivx.com'}, {'title': 'Boze Cialo (2019) aka Corpus Christi', 'description': 'subtítulo sincronizado a la versión boze cialo [corpus christi] 2019 720p brrip x264-titler, de 1,22 gb', 'url': 'http://www.subdivx.com/X6XNTg2NTU3X-boze-cialo-2019-aka-corpus-christi.html', 'provider': 'subdivx.com'}]}
 ```
-## Eficacia
-`subcaretin` tiene una serie de filtros específicamente optimizados para las búsquedas en Argenteam y Subdivx, por lo que apunta a ser más eficaz que aplicaciones similares de subtítulos. De cualquier forma, mientras mejor estén nombrados tus archivos de vídeo, mejores resultados podrá ofrecer esta herramienta.
-## TODO
-* Mejorar los filtros
-* Descargar por carpetas
-* Mejorar el manejo de errores
-* Agregar más proveedores (?)
-## Miscelánea
-* Para mejorar la compatibilidad, este script fue reescrito en Python a partir del 25 de Julio de 2020. Anteriormente fue un bash script. Puedes encontrar la versión obsoleta en las branches
-* Mi subdivx: https://www.subdivx.com/X9X2117299
